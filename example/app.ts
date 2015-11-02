@@ -14,7 +14,7 @@ app.get("/", (request, response) => {
 		ApiSecret: config.ApiSecret
 	});
 	
-	client.Get("api/v1/users.json")
+	client.Get(`api/v1/forums/${"269223"}/suggestions.json?per_page=500`)
 		.then(data => {
 			console.log(data);
 		}, error => console.log(error));
@@ -23,7 +23,7 @@ app.get("/", (request, response) => {
 });
 
 app.listen(3000, function() {
-    console.log("Demo Express server listening on port %d in %s mode", 3000, app.settings.env);
+    console.log("Demo Express server listening on port %d in %s mode", 3001, app.settings.env);
 });
 
 export var App = app;

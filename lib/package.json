@@ -1,12 +1,12 @@
 {
   "name": "uservoice-nodejs",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "The UserVoice SDK for Node.js",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Luke Autry <lukeautry@gmail.com> (http://www.lukeautry.com)",
+  "author": "Luke Autry <lukeautry@gmail.com> (https://www.uservoice.com)",
   "license": "ISC",
   "devDependencies": {
     "dts-bundle": "^0.3.0",

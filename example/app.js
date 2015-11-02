@@ -10,13 +10,13 @@ app.get("/", function (request, response) {
         ApiKey: config.ApiKey,
         ApiSecret: config.ApiSecret
     });
-    client.Get("api/v1/users.json")
+    client.Get("api/v1/forums/" + "269223" + "/suggestions.json?per_page=500")
         .then(function (data) {
         console.log(data);
     }, function (error) { return console.log(error); });
     response.end();
 });
 app.listen(3000, function () {
-    console.log("Demo Express server listening on port %d in %s mode", 3000, app.settings.env);
+    console.log("Demo Express server listening on port %d in %s mode", 3001, app.settings.env);
 });
 exports.App = app;
