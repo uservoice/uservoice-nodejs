@@ -5,7 +5,7 @@ import express = require("express");
 import uservoice = require("../lib/index");
 import config = require("./config");
 
-var app = express();
+var app: any = express();
 app.get("/", (request, response) => {
 	
 	var client = new uservoice.Client({

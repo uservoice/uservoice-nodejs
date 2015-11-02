@@ -1,9 +1,9 @@
-/// <reference path='typings/oauth/oauth.d.ts' />
-/// <reference path='typings/node/node.d.ts' />
-/// <reference path='typings/es6-promise/es6-promise.d.ts' />
+/// <reference path='./typings/oauth/oauth.d.ts' />
+/// <reference path='./typings/node/node.d.ts' />
+/// <reference path='./typings/es6-promise/es6-promise.d.ts' />
 
-import oauth = require("oauth");
-import http = require("http");
+import * as oauth from "oauth";
+import {IClientData} from "./src/IClientData";
 
 export class Client {
 	private OAuthConsumer: oauth.OAuth;
@@ -96,15 +96,4 @@ export class Client {
 			'HMAC-SHA1'
 		);
 	}
-}
-
-export interface IClientData {
-	SubdomainName: string;
-	ApiKey: string;
-	ApiSecret?: string;
-	CallBack?: string;
-	Token?: string;
-	Secret?: string;
-	UservoiceDomain?: string;
-	Protocol?: string;
 }
