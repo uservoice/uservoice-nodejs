@@ -3,8 +3,10 @@
 declare module 'uservoice' {
     export class Client {
         constructor(ClientData: IClientData);
-        LoginAsOwner(): void;
-        LoginAsUser(email: string): void;
+        Get(endpoint: string): Promise<any>;
+        Post(endpoint: string, data?: any): Promise<{}>;
+        Delete(endpoint: string): Promise<any>;
+        Put(endpoint: string, data?: any): Promise<{}>;
     }
     export interface IClientData {
         SubdomainName: string;

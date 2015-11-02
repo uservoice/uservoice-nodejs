@@ -1,5 +1,6 @@
 /// <reference path='typings/oauth/oauth.d.ts' />
 /// <reference path='typings/node/node.d.ts' />
+/// <reference path='typings/es6-promise/es6-promise.d.ts' />
 
 import oauth = require("oauth");
 import http = require("http");
@@ -16,27 +17,62 @@ export class Client {
 		this.BaseApiUrl = `${this.ClientData.Protocol}://${this.ClientData.SubdomainName}.${this.ClientData.UservoiceDomain}`;
 		
 		this.InitializeOAuth();
+		this.FetchToken();
 	}
 	
-	public LoginAsOwner() {
-		this.GetRequestToken();
-		
-		// const requestOptions = {
-		// 	host: this.BaseApiUrl,
-		// 	path: "/api/v1/users/login_as_owner",
-		// 	method: "POST"
-		// }
-		// 
-		// const request = http.request(requestOptions, response => {
-		// 	console.log(response);
-		// });
-	};
-	
-	public LoginAsUser(email: string) {
-		this.GetRequestToken();
+	public Get(endpoint: string): Promise<any> {
+		return new Promise((resolve, reject) => {
+			this.OAuthConsumer.get(`${this.BaseApiUrl}/${endpoint}`, this.OAuthToken, this.OAuthTokenSecret, (error, data, response) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+				
+				resolve(JSON.parse(data));
+			});
+		});
 	}
 	
-	private GetRequestToken() {
+	public Post(endpoint: string, data?: any) {
+		return new Promise((resolve, reject) => {
+			this.OAuthConsumer.post(`${this.BaseApiUrl}/${endpoint}`, this.OAuthToken, this.OAuthTokenSecret, data, "application/json", (error, data, response) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+				
+				resolve(JSON.parse(data));
+			});
+		});
+	}
+	
+	public Delete(endpoint: string): Promise<any> {
+		return new Promise((resolve, reject) => {
+			this.OAuthConsumer.delete(`${this.BaseApiUrl}/${endpoint}`, this.OAuthToken, this.OAuthTokenSecret, (error, data, response) => {
+				if (error){
+					reject(error);
+					return;
+				}
+				
+				resolve();
+			});
+		});
+	}
+	
+	public Put(endpoint: string, data?: any): Promise<any> {
+		return new Promise((resolve, reject) => {
+			this.OAuthConsumer.put(`${this.BaseApiUrl}/${endpoint}`, this.OAuthToken, this.OAuthTokenSecret, data, "application/json", (error, data, response) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(JSON.parse(data));
+			});
+		});
+	}
+	
+	private FetchToken() {
 		this.OAuthConsumer.getOAuthRequestToken((error, oauthToken, oauthTokenSecret, results) => {
 			
 			if (error) {
@@ -46,14 +82,6 @@ export class Client {
 			
 			this.OAuthToken = oauthToken;
 			this.OAuthTokenSecret = oauthTokenSecret;
-			
-			this.OAuthConsumer.post(`${this.BaseApiUrl}/api/v1/oauth/authorize.json`, this.OAuthToken, this.OAuthTokenSecret, null, "application/json", (err, data, response) => {
-				console.log(data);
-			})
-			
-			// this.OAuthConsumer.get(`${this.BaseApiUrl}/api/v1/custom_fields.json`, this.OAuthToken, this.OAuthTokenSecret, (err, data, response) => {
-			// 	
-			// })
 		});
 	}
 	
@@ -63,7 +91,7 @@ export class Client {
 			`${this.BaseApiUrl}/oauth/access_token`,
 			this.ClientData.ApiKey,
 			this.ClientData.ApiSecret,
-			'1.0',
+			'1.0A',
 			null,
 			'HMAC-SHA1'
 		);
@@ -74,19 +102,9 @@ export interface IClientData {
 	SubdomainName: string;
 	ApiKey: string;
 	ApiSecret?: string;
-	CallBack?: string; // wtf is this
+	CallBack?: string;
 	Token?: string;
 	Secret?: string;
 	UservoiceDomain?: string;
 	Protocol?: string;
-}
-
-interface AuthorizationData {
-	oauth_signiture_method: string;
-	oauth_signature: string;
-	oauth_timestamp: string;
-	oauth_nonce: string;
-	oauth_version: string;
-	oauth_consumer_key: string;
-	request_token: string;
 }
