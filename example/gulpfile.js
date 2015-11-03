@@ -1,6 +1,7 @@
 var gulp = require("gulp");
 var spawn = require("child_process").spawn;
 var node = null;
+var runSequence = require("run-sequence");
 require("./tasks/typescript");
 
 gulp.task("default", ["typescript"]);
@@ -17,16 +18,12 @@ gulp.task('server', function() {
       gulp.log('Error detected, waiting for changes...');
     }
   });
-})
+});
 
 gulp.task('serve', function() {
-  gulp.run('server')
+  runSequence("typescript", "server");
 
   gulp.watch(['./**/*.ts'], function() {
-    gulp.run(["typescript", 'server']);
-  })
-  
-  // Need to watch for sass changes too? Just add another watch call!
-  // no more messing around with grunt-concurrent or the like. Gulp is
-  // async by default.
-})
+    runSequence("typescript", "server");
+  });
+});

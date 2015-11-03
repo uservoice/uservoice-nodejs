@@ -4,18 +4,22 @@ var uservoice = require("../lib/dist/index");
 var config = require("./config");
 var app = express();
 app.get("/", function (request, response) {
-    var client = new uservoice.Client({
+    var client = InitializeClient();
+    client.Get("api/v1/forums.json", {
+        per_page: 500
+    })
+        .then(function (data) { return console.log(data); }, function (error) { return console.log(error); });
+    response.end();
+});
+var port = 3000;
+app.listen(port, function () {
+    console.log("Demo Express server listening on port %d in %s mode", port, app.settings.env);
+});
+function InitializeClient() {
+    return new uservoice.Client({
         SubdomainName: config.Subdomain,
         ApiKey: config.ApiKey,
         ApiSecret: config.ApiSecret
     });
-    client.Get("api/v1/forums/" + "269223" + "/suggestions.json?per_page=500")
-        .then(function (data) {
-        console.log(data);
-    }, function (error) { return console.log(error); });
-    response.end();
-});
-app.listen(3000, function () {
-    console.log("Demo Express server listening on port %d in %s mode", 3001, app.settings.env);
-});
+}
 exports.App = app;

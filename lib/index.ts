@@ -20,15 +20,17 @@ export class Client {
 		this.FetchToken();
 	}
 	
-	public Get(endpoint: string): Promise<any> {
+	public Get(endpoint: string, data?: any): Promise<any> {
 		return new Promise((resolve, reject) => {
-			this.OAuthConsumer.get(`${this.BaseApiUrl}/${endpoint}`, this.OAuthToken, this.OAuthTokenSecret, (error, data, response) => {
+			const url = `${this.BaseApiUrl}/${endpoint}?${data ? Object.keys(data).map(key => `${key}=${data[key]}`) : ""}`;
+			
+			this.OAuthConsumer.get(url, this.OAuthToken, this.OAuthTokenSecret, (error, data, response) => {
 				if (error) {
 					reject(error);
 					return;
 				}
 				
-				resolve(JSON.parse(data));
+				resolve(this.ParseData(data));
 			});
 		});
 	}
@@ -67,14 +69,13 @@ export class Client {
 					return;
 				}
 
-				resolve(JSON.parse(data));
+				resolve(this.ParseData(data));
 			});
 		});
 	}
 	
 	private FetchToken() {
 		this.OAuthConsumer.getOAuthRequestToken((error, oauthToken, oauthTokenSecret, results) => {
-			
 			if (error) {
 				throw new Error("Failed to retrieve request token.");	
 				return;
@@ -95,5 +96,13 @@ export class Client {
 			null,
 			'HMAC-SHA1'
 		);
+	}
+	
+	private ParseData(data: any) {
+		try {
+			return JSON.parse(data);
+		} catch(err) { 
+			return data;
+		}
 	}
 }

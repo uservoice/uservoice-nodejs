@@ -1,10 +1,8 @@
 export interface IClientData {
     SubdomainName: string;
     ApiKey: string;
-    ApiSecret?: string;
-    CallBack?: string;
-    Token?: string;
-    Secret?: string;
+    ApiSecret: string;
+    CallbackUrl?: string;
     UservoiceDomain?: string;
     Protocol?: string;
 }
