@@ -1,7 +1,6 @@
-/// <reference path='typings/node/node.d.ts' />
-/// <reference path='typings/express/express.d.ts' />
+/// <reference path='typings/es6-promise/es6-promise.d.ts' />
 var express = require("express");
-var uservoice = require("../lib/index");
+var uservoice = require("../lib/dist/index");
 var config = require("./config");
 var app = express();
 app.get("/", function (request, response) {

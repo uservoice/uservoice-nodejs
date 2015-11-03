@@ -1,7 +1,7 @@
-/// <reference path="typings/oauth/oauth.d.ts" />
-/// <reference path="typings/node/node.d.ts" />
-/// <reference path="typings/es6-promise/es6-promise.d.ts" />
-import { IClientData } from "./src/IClientData";
+
+
+
+import { IClientData } from "./IClientData";
 export declare class Client {
     private ClientData;
     private OAuthConsumer;

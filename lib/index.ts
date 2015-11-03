@@ -1,9 +1,9 @@
-/// <reference path='./typings/oauth/oauth.d.ts' />
-/// <reference path='./typings/node/node.d.ts' />
-/// <reference path='./typings/es6-promise/es6-promise.d.ts' />
+/// <reference path='typings/oauth/oauth.d.ts' />
+/// <reference path='typings/node/node.d.ts' />
+/// <reference path='typings/es6-promise/es6-promise.d.ts' />
 
 import * as oauth from "oauth";
-import {IClientData} from "./src/IClientData";
+import {IClientData} from "./IClientData";
 
 export class Client {
 	private OAuthConsumer: oauth.OAuth;
