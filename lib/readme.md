@@ -2,9 +2,11 @@
 
 UserVoice SDK is now packaged in a npm library to be used from Node.js services.
 
-# install Uservoice Library from npm
+# Install Uservoice Library from NPM
 
 <pre>npm install uservoice-nodejs --save</pre>
+
+# Usage
 
 <pre>
 <code>var express = require("express");
@@ -48,6 +50,5 @@ app.get("/", (request, response) => {
 	
 	response.end();
 });
-
 </code>
 </pre>
