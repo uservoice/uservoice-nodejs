@@ -6,10 +6,10 @@ import * as oauth from "oauth";
 import {IClientData} from "./IClientData";
 
 export class Client {
+	private BaseApiUrl: string;	
 	private OAuthConsumer: oauth.OAuth;
 	private OAuthToken: string;
 	private OAuthTokenSecret: string;
-	private BaseApiUrl: string;
 	
 	constructor(private ClientData: IClientData) {
 		this.ClientData.Protocol = this.ClientData.Protocol || "https";
@@ -37,7 +37,7 @@ export class Client {
 	
 	public Post(endpoint: string, data?: any) {
 		return new Promise((resolve, reject) => {
-			this.OAuthConsumer.post(`${this.BaseApiUrl}/${endpoint}`, this.OAuthToken, this.OAuthTokenSecret, data, "application/json", (error, data, response) => {
+			this.OAuthConsumer.post(`${this.BaseApiUrl}/${endpoint}`, this.OAuthToken, this.OAuthTokenSecret, data ? JSON.stringify(data) : null, "application/json", (error, data, response) => {
 				if (error) {
 					reject(error);
 					return;
@@ -63,7 +63,7 @@ export class Client {
 	
 	public Put(endpoint: string, data?: any): Promise<any> {
 		return new Promise((resolve, reject) => {
-			this.OAuthConsumer.put(`${this.BaseApiUrl}/${endpoint}`, this.OAuthToken, this.OAuthTokenSecret, data, "application/json", (error, data, response) => {
+			this.OAuthConsumer.put(`${this.BaseApiUrl}/${endpoint}`, this.OAuthToken, this.OAuthTokenSecret, data ? JSON.stringify(data) : null, "application/json", (error, data, response) => {
 				if (error) {
 					reject(error);
 					return;

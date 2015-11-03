@@ -9,6 +9,16 @@ app.get("/", function (request, response) {
         per_page: 500
     })
         .then(function (data) { return console.log(data); }, function (error) { return console.log(error); });
+    client.Post("api/v1/tickets.json", {
+        email: "test@test123.com",
+        name: "api test",
+        ticket: {
+            state: "open",
+            subject: "testing api",
+            message: "this is a message"
+        }
+    })
+        .then(function (data) { return console.log(data); }, function (error) { return console.log(error); });
     response.end();
 });
 var port = 3000;

@@ -8,6 +8,7 @@ var app: any = express();
 
 app.get("/", (request, response) => {
 	var client = InitializeClient();
+	
 	client.Get(`api/v1/forums.json`, {
 		per_page: 500
 	})
@@ -15,6 +16,20 @@ app.get("/", (request, response) => {
 		data => console.log(data),
 		error => console.log(error)
 	);
+	
+	client.Post(`api/v1/tickets.json`, {
+		email: "test@test123.com",
+		name: "api test",
+		ticket: {
+			state: "open",
+			subject: "testing api",
+			message: "this is a message" 
+		}
+	})
+	.then(
+		data => console.log(data),
+		error => console.log(error)
+	)
 	
 	response.end();
 });
