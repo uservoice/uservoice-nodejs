@@ -43,7 +43,7 @@ export class Client {
 					return;
 				}
 				
-				resolve(JSON.parse(data));
+				resolve(this.ParseData(data));
 			});
 		});
 	}
