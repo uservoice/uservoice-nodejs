@@ -22,7 +22,7 @@ export class Client {
 	
 	public Get(endpoint: string, data?: any): Promise<any> {
 		return new Promise((resolve, reject) => {
-			const url = `${this.BaseApiUrl}/${endpoint}?${data ? Object.keys(data).map(key => `${key}=${data[key]}`) : ""}`;
+			const url = `${this.BaseApiUrl}/${endpoint}?${data ? Object.keys(data).map(key => `${key}=${data[key]}&`).join("") : ""}`;
 			
 			this.OAuthConsumer.get(url, this.OAuthToken, this.OAuthTokenSecret, (error, data, response) => {
 				if (error) {
