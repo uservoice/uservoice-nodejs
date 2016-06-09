@@ -1,0 +1,48 @@
+{
+  "name": "uservoice-nodejs",
+  "version": "0.0.4",
+  "description": "Node.js SDK for UserVoice",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "scripts": {
+    "test": "mocha tests/**/*.spec.ts --require ts-node/register",
+    "start": "tsc -w",
+    "typings": "typings",
+    "postinstall": "npm run typings install && npm run clean && npm run build",
+    "build": "tsc && npm run lint && npm run dts && npm run copy-static",
+    "dts": "dts-generator --name uservoice-nodejs --project ./ --out ./dist/index.d.ts --exclude **/*.spec.ts --exclude './node_modules/**' --exclude './typings/**'",
+    "clean": "rimraf dist",
+    "lint": "tslint 'src/**/*.ts' --exclude '**/*.d.ts'",
+    "example": "ts-node ./example/server.ts",
+    "example-v2": "ts-node ./example/server_v2.ts",
+    "copy-static": "cp example/attachment.txt dist/example"
+  },
+  "keywords": [
+    "uservoice"
+  ],
+  "author": "Luke Autry <luke.autry@uservoice.com>",
+  "dependencies": {
+    "moment": "^2.13.0",
+    "oauth": "^0.9.14",
+    "q": "^1.4.1",
+    "request": "^2.72.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "dts-generator": "^1.7.0",
+    "mocha": "^2.4.5",
+    "rimraf": "^2.5.2",
+    "ts-node": "^0.7.3",
+    "tslint": "^3.10.2",
+    "typescript": "^1.8.10",
+    "typings": "^1.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uservoice/uservoice-nodejs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/uservoice/uservoice-nodejs/issues"
+  },
+  "homepage": "https://github.com/uservoice/uservoice-nodejs#readme"
+}

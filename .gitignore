@@ -1,4 +1,4 @@
-example/node_modules
-lib/node_modules
-example/config.ts
-example/config.js
+/.idea
+/node_modules
+typings
+dist

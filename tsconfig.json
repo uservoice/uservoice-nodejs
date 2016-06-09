@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "removeComments": true,
+        "rootDir": "./",
+        "outDir": "./dist",
+        "noImplicitAny": true,
+        "sourceMap": true
+    },
+    "exclude": [
+        "node_modules",
+        "**/*.d.ts",
+        "dist",
+        "src/tests"
+    ]
+}
