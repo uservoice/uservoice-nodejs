@@ -59,7 +59,7 @@ client.get('tickets.json')
 // Requests can also be made against the V2 API
 var v2Client = new UserVoice.ClientV2({
   clientId: 'apiKey',
-  subdomain: 'subdomain
+  subdomain: 'subdomain'
 });
 
 var apiSecret = 'apiSecret';
