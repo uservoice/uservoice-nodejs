@@ -9,8 +9,7 @@
     "start": "tsc -w",
     "typings": "typings",
     "compile": "npm run typings install && npm run clean && npm run build",
-    "build": "tsc && npm run lint && npm run dts && npm run copy-static",
-    "dts": "dts-generator --name uservoice-nodejs --project ./ --out ./dist/src/index.d.ts --exclude **/*.spec.ts --exclude './node_modules/**' --exclude './typings/**'",
+    "build": "tsc && npm run lint && npm run copy-static",
     "clean": "rimraf dist",
     "lint": "tslint 'src/**/*.ts' --exclude '**/*.d.ts'",
     "example": "ts-node ./example/server.ts",
@@ -30,7 +29,6 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "dts-generator": "^1.7.0",
     "mocha": "^2.4.5",
     "rimraf": "^2.5.2",
     "ts-node": "^0.7.3",
