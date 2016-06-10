@@ -1,4 +1,5 @@
 import * as UserVoice from '../src/index';
+import * as Promise from 'bluebird';
 import {Config} from './config';
 
 const testForumId = 0;
@@ -14,7 +15,7 @@ const client = new UserVoice.ClientV2({
 client.loginAsOwner(Config.apiSecret)
   .then(ownerClient => {
     const example = new Example(ownerClient);
-    example.createNpsRating();
+    example.listForums();
   });
 
 class Example {
@@ -45,7 +46,7 @@ class Example {
     }));
   }
 
-  private defaultPromiseHandler(promise: Q.Promise<any>) {
+  private defaultPromiseHandler(promise: Promise<any>) {
     return promise
       // tslint:disable-next-line
       .then(data => console.log(data))

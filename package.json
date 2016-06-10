@@ -3,6 +3,7 @@
   "version": "1.0.6",
   "description": "Node.js SDK for UserVoice",
   "main": "./dist/src/index.js",
+  "typings": "./dist/src/index.d.ts",
   "scripts": {
     "test": "mocha tests/**/*.spec.ts --require ts-node/register",
     "start": "tsc -w",
@@ -21,9 +22,9 @@
   ],
   "author": "Luke Autry <luke.autry@uservoice.com>",
   "dependencies": {
+    "bluebird": "^3.4.0",
     "moment": "^2.13.0",
     "oauth": "^0.9.14",
-    "q": "^1.4.1",
     "request": "^2.72.0"
   },
   "devDependencies": {
@@ -42,5 +43,8 @@
   "bugs": {
     "url": "https://github.com/uservoice/uservoice-nodejs/issues"
   },
-  "homepage": "https://github.com/uservoice/uservoice-nodejs#readme"
+  "homepage": "https://github.com/uservoice/uservoice-nodejs#readme",
+  "engines": {
+    "node": ""
+  }
 }

@@ -1,5 +1,5 @@
+import * as Promise from 'bluebird';
 import * as request from 'request';
-import * as q from 'q';
 import * as querystring from 'querystring';
 import {DateParser} from '../dateParser';
 import {ForumService} from './api/services/forumService';
@@ -46,7 +46,6 @@ export class ClientV2 implements IClientV2 {
   }
 
   private executeRequest<T>(method: string, endpoint: string, data?: any) {
-    const deferred = q.defer<T>();
     const options: request.CoreOptions = { method: method };
 
     if (data) {
@@ -58,35 +57,33 @@ export class ClientV2 implements IClientV2 {
       options.headers = { Authorization: `Bearer ${this.accessToken}` };
     }
 
-    request(`${this.baseUrl}${endpoint}`, options, (error, response, body) => {
-      if (error) { return deferred.reject(error); }
-
-      deferred.resolve(this.parse(body));
+    return new Promise<T>((resolve, reject) => {
+      request(`${this.baseUrl}${endpoint}`, options, (error, response, body) => {
+        if (error) { return reject(error); }
+        resolve(this.parse(body));
+      });
     });
-
-    return deferred.promise;
   }
 
   private loginWithBody(requestBody: string) {
-    const deferred = q.defer<ClientV2>();
     const options: request.CoreOptions = {
       body: requestBody,
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
       method: 'POST'
     };
 
-    request(`${this.baseUrl}oauth/token`, options, (error, response, body) => {
-      if (error) { return deferred.reject(error); }
+    return new Promise<ClientV2>((resolve, reject) => {
+      request(`${this.baseUrl}oauth/token`, options, (error, response, body) => {
+        if (error) { return reject(error); }
 
-      const parsedBody = JSON.parse(body);
-      const accessToken = parsedBody.access_token;
-      if (!accessToken) { return deferred.reject(parsedBody); }
+        const parsedBody = JSON.parse(body);
+        const accessToken = parsedBody.access_token;
+        if (!accessToken) { return reject(parsedBody); }
 
-      this.accessToken = accessToken;
-      deferred.resolve(this);
+        this.accessToken = accessToken;
+        resolve(this);
+      });
     });
-
-    return deferred.promise;
   }
 
   private parse(data: any) {
@@ -103,12 +100,12 @@ export class ClientV2 implements IClientV2 {
 }
 
 export interface IClientV2 {
-  loginAsOwner(clientSecret: string): Q.Promise<IClientV2>;
-  loginAsUser(email: string, password: string): Q.Promise<IClientV2>;
-  get<T>(endpoint: string, data?: any): Q.Promise<T>;
-  post<T>(endpoint: string, data?: any): Q.Promise<T>;
-  put<T>(endpoint: string, data?: any): Q.Promise<T>;
-  delete<T>(endpoint: string): Q.Promise<T>;
+  loginAsOwner(clientSecret: string): Promise<IClientV2>;
+  loginAsUser(email: string, password: string): Promise<IClientV2>;
+  get<T>(endpoint: string, data?: any): Promise<T>;
+  post<T>(endpoint: string, data?: any): Promise<T>;
+  put<T>(endpoint: string, data?: any): Promise<T>;
+  delete<T>(endpoint: string): Promise<T>;
 }
 
 export interface IClientV2Options {

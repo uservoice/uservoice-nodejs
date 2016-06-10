@@ -1,7 +1,7 @@
 import * as UserVoice from '../src/index';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as q from 'q';
+import * as Promise from 'bluebird';
 import {Config} from './config';
 
 const testTicketId = 0;
@@ -17,7 +17,7 @@ const client = new UserVoice.Client({
 client.loginAsOwner()
   .then(ownerClient => {
     const example = new Example(ownerClient);
-    example.getAsset();
+    example.listTickets();
   });
 
 class Example {
@@ -121,7 +121,7 @@ class Example {
     return this.defaultPromiseHandler(this.uvClient.ticketMessageService.listAll());
   }
 
-  private defaultPromiseHandler(promise: Q.Promise<any>) {
+  private defaultPromiseHandler(promise: Promise<any>) {
     return promise
       // tslint:disable-next-line
       .then(data => console.log(data))
@@ -130,18 +130,17 @@ class Example {
   }
 }
 
-function getBase64EncodedFile(): Q.Promise<string> {
+function getBase64EncodedFile(): Promise<string> {
   'use strict';
 
-  const defer = q.defer<string>();
   const filePath = path.join(__dirname, 'attachment.txt');
 
-  fs.readFile(filePath, { encoding: 'utf-8' }, (err, data) => {
-    if (err) { throw new Error('There was a problem reading the file from disk.'); }
-    defer.resolve(new Buffer(data).toString('base64'));
+  return new Promise<string>((resolve, reject) => {
+    fs.readFile(filePath, { encoding: 'utf-8' }, (err, data) => {
+      if (err) { reject('There was a problem reading the file from disk.'); }
+      resolve(new Buffer(data).toString('base64'));
+    });
   });
-
-  return defer.promise;
 }
 
 // localdev: process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';

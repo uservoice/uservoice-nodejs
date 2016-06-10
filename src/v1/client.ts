@@ -1,4 +1,4 @@
-import * as q from 'q';
+import * as Promise from 'bluebird';
 import * as querystring from 'querystring';
 import {TicketService} from './api/services/ticketService';
 import {TicketMessageService} from './api/services/ticketMessageService';
@@ -48,48 +48,40 @@ export class Client {
   public get<T>(endpoint: string, data: any = {}) {
     DateParser.processDates(data);
 
-    const defer = q.defer<T>();
-
     let url = this.baseUrl + endpoint;
     if (data) {
       url = `${url}?${querystring.stringify(data)}`;
     }
 
-    this.consumer.get(url, this.getAccessToken(), this.getAccessSecret(),
-      (error, response) => this.resolveConsumerResponse(error, response, defer));
-
-    return defer.promise;
+    return new Promise<T>((resolve, reject) => {
+      this.consumer.get(url, this.getAccessToken(), this.getAccessSecret(),
+        (error, response) => this.resolveConsumerResponse(error, response, resolve, reject));
+    });
   }
 
   public post<T>(endpoint: string, data: any = {}) {
     DateParser.processDates(data);
 
-    const defer = q.defer<T>();
-
-    this.consumer.post(this.baseUrl + endpoint, this.getAccessToken(), this.getAccessSecret(), JSON.stringify(data), 'application/json',
-      (error: any, response: any) => this.resolveConsumerResponse(error, response, defer));
-
-    return defer.promise;
+    return new Promise<T>((resolve, reject) => {
+      this.consumer.post(this.baseUrl + endpoint, this.getAccessToken(), this.getAccessSecret(), JSON.stringify(data), 'application/json',
+        (error: any, response: any) => this.resolveConsumerResponse(error, response, resolve, reject));
+    });
   }
 
   public put<T>(endpoint: string, data: any = {}) {
     DateParser.processDates(data);
 
-    const defer = q.defer<T>();
-
-    this.consumer.put(this.baseUrl + endpoint, this.getAccessToken(), this.getAccessSecret(), JSON.stringify(data), 'application/json',
-      (error: any, response: any) => this.resolveConsumerResponse(error, response, defer));
-
-    return defer.promise;
+    return new Promise<T>((resolve, reject) => {
+      this.consumer.put(this.baseUrl + endpoint, this.getAccessToken(), this.getAccessSecret(), JSON.stringify(data), 'application/json',
+        (error: any, response: any) => this.resolveConsumerResponse(error, response, resolve, reject));
+    });
   }
 
   public delete<T>(endpoint: string) {
-    const defer = q.defer<T>();
-
-    this.consumer.delete(this.baseUrl + endpoint, this.getAccessToken(), this.getAccessSecret(),
-      (error, data) => this.resolveConsumerResponse(error, data, defer));
-
-    return defer.promise;
+    return new Promise<T>((resolve, reject) => {
+      this.consumer.delete(this.baseUrl + endpoint, this.getAccessToken(), this.getAccessSecret(),
+        (error, data) => this.resolveConsumerResponse(error, data, resolve, reject));
+    });
   }
 
   public getAccessToken() { return this.clientOptions ? this.clientOptions.accessToken : ''; }
@@ -104,22 +96,19 @@ export class Client {
   }
 
   private getRequestToken() {
-    const defer = q.defer<Client>();
+    return new Promise<Client>((resolve, reject) => {
+      this.consumer.getOAuthRequestToken((error, oauthToken, oauthTokenSecret, results) => {
 
-    this.consumer.getOAuthRequestToken((error, oauthToken, oauthTokenSecret, results) => {
+        if (error) {
+          reject(error);
+          return;
+        }
 
-      if (error) {
-        defer.reject(error);
-        return;
-      }
-
-
-      const parsedResults = JSON.parse(Object.keys(results)[0]);
-      const token = parsedResults.token;
-      defer.resolve(this.loginWithAccessToken(token.oauth_token, token.oauth_token_secret));
+        const parsedResults = JSON.parse(Object.keys(results)[0]);
+        const token = parsedResults.token;
+        resolve(this.loginWithAccessToken(token.oauth_token, token.oauth_token_secret));
+      });
     });
-
-    return defer.promise;
   }
 
   /**
@@ -131,13 +120,13 @@ export class Client {
     return options;
   }
 
-  private resolveConsumerResponse(error: any, data: any, defer: Q.Deferred<any>) {
+  private resolveConsumerResponse<T>(error: any, data: any, resolve: (result: T) => void, reject: (error: any) => void) {
     if (error) {
-      defer.reject(error);
+      reject(error);
       return;
     }
 
-    defer.resolve(this.parse(data));
+    resolve(this.parse(data));
   }
 
   private parse(data: any) {
@@ -159,13 +148,6 @@ export class Client {
   private getAccessSecret() { return this.clientOptions ? this.clientOptions.accessSecret : ''; }
 }
 
-interface ILoginAsResponse {
-  token: {
-    oauth_token: string;
-    oauth_token_secret: string;
-  };
-}
-
 export interface IClientOptions {
   subdomain: string;
   apiKey: string;
@@ -174,4 +156,11 @@ export interface IClientOptions {
   options?: IRequestOptions;
   accessToken?: string;
   accessSecret?: string;
+}
+
+interface ILoginAsResponse {
+  token: {
+    oauth_token: string;
+    oauth_token_secret: string;
+  };
 }

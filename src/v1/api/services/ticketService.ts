@@ -1,9 +1,10 @@
+import * as Promise from 'bluebird';
 import {IRequestOptions} from '../models/model';
 import {ITicketResponse, ITicketListResponse, ITicketCreateRequest, ITicketUpdateRequest} from '../models/ticket';
 import {ApiService} from './apiService';
 
 export class TicketService extends ApiService {
-  public create(data: ITicketCreateRequest) {
+  public create(data: ITicketCreateRequest): Promise<ITicketResponse> {
     if (!data.email && !this.client.getAccessToken()) {
       throw new Error('Not authorized to create ticket; must login first.');
     }
@@ -11,14 +12,14 @@ export class TicketService extends ApiService {
     return this.client.post<ITicketResponse>('tickets.json', data);
   }
 
-  public update(ticketId: number, ticketData: ITicketUpdateRequest) {
+  public update(ticketId: number, ticketData: ITicketUpdateRequest): Promise<ITicketResponse> {
     return this.client.put<ITicketResponse>(`tickets/${ticketId}.json`, ticketData);
   }
 
   /**
    * @link https://developer.uservoice.com/docs/api/reference/#_api_v1_tickets_get
    */
-  public list(options: IRequestOptions = {}) {
+  public list(options: IRequestOptions = {}): Promise<ITicketListResponse> {
     options.per_page = options.per_page || this.client.requestOptions.pagination.max;
     return this.client.get<ITicketListResponse>('tickets.json', options);
   }
@@ -26,7 +27,7 @@ export class TicketService extends ApiService {
   /**
    * @link https://developer.uservoice.com/docs/api/reference/#_api_v1_custom_fields_get
    */
-  public getCustomFields(includePublic: boolean) {
+  public getCustomFields(includePublic: boolean): Promise<any> {
     return this.client.get<any>(includePublic ? 'custom_fields/public.json' : 'custom_fields.json');
   }
 
@@ -35,7 +36,7 @@ export class TicketService extends ApiService {
    * @link https://developer.uservoice.com/docs/api/reference/#_api_v1_tickets_search_get
    * @link http://feedback.uservoice.com/knowledgebase/articles/49267-how-do-i-search-for-and-sort-through-tickets-
    */
-  public search(query: string, options: IRequestOptions = {}) {
+  public search(query: string, options: IRequestOptions = {}): Promise<ITicketListResponse> {
     options.per_page = options.per_page || this.client.requestOptions.pagination.max;
     options.query = query;
 
@@ -45,7 +46,7 @@ export class TicketService extends ApiService {
   /**
    * @link https://developer.uservoice.com/docs/api/reference/#_api_v1_tickets_ticket_id_get
    */
-  public show(ticketId: number) {
+  public show(ticketId: number): Promise<ITicketResponse> {
     if (!ticketId) {
       throw new Error('ticketId cannot be empty');
     }
