@@ -1,6 +1,6 @@
 {
   "name": "uservoice-nodejs",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Node.js SDK for UserVoice",
   "main": "./dist/src/index.js",
   "typings": "./dist/src/index.d.ts",
