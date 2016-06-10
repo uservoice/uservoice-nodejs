@@ -121,6 +121,10 @@ clientv2.loginAsOwner()
 Contributing/Dev Environment
 ============
 
+Getting Started
+-----
+- npm install
+
 Npm Tasks
 -----
 - No global package installations should be necessary

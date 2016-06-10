@@ -1,6 +1,6 @@
 {
   "name": "uservoice-nodejs",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Node.js SDK for UserVoice",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -8,14 +8,15 @@
     "test": "mocha tests/**/*.spec.ts --require ts-node/register",
     "start": "tsc -w",
     "typings": "typings",
-    "postinstall": "npm run typings install && npm run clean && npm run build",
+    "compile": "npm run typings install && npm run clean && npm run build",
     "build": "tsc && npm run lint && npm run dts && npm run copy-static",
     "dts": "dts-generator --name uservoice-nodejs --project ./ --out ./dist/index.d.ts --exclude **/*.spec.ts --exclude './node_modules/**' --exclude './typings/**'",
     "clean": "rimraf dist",
     "lint": "tslint 'src/**/*.ts' --exclude '**/*.d.ts'",
     "example": "ts-node ./example/server.ts",
     "example-v2": "ts-node ./example/server_v2.ts",
-    "copy-static": "cp example/attachment.txt dist/example"
+    "copy-static": "cp example/attachment.txt dist/example",
+    "prepublish": "npm run compile"
   },
   "keywords": [
     "uservoice"
