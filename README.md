@@ -35,7 +35,7 @@ var client = new UserVoice.Client({
 
 // Login as owner
 client.loginAsOwner()
-  .then(function(ownerClient) => {
+  .then(function(ownerClient) {
     var ticketId = 1;
     ownerClient.create('tickets' + ticketId + '/notes.json', {
       note: {
