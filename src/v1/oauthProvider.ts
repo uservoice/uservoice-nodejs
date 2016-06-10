@@ -1,7 +1,7 @@
 import * as oauth from 'oauth';
 
 export class OAuthProvider implements IOAuthProvider {
-  public getConsumer(baseUrl: string, apiKey: string, apiSecret: string) {
+  public getConsumer(baseUrl: string, apiKey: string, apiSecret: string): IOAuthConsumer {
     return new oauth.OAuth(
       `${baseUrl}oauth/request_token.json`,
       `${baseUrl}oauth/access_token.json`,
