@@ -19,6 +19,7 @@
   "keywords": [
     "uservoice"
   ],
+  "license": "MIT",
   "author": "Luke Autry <luke.autry@uservoice.com>",
   "dependencies": {
     "bluebird": "^3.4.0",
