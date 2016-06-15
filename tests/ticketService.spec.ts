@@ -1,4 +1,5 @@
 import * as chai from 'chai';
+import * as moment from 'moment';
 import {Client} from '../src/v1/client';
 import {TicketService} from '../src/v1/api/services/ticketService';
 import {FakeOAuthProvider, IResponseOptions} from './fixtures';
@@ -14,23 +15,23 @@ const ticketData = {
 
 /**
  * Sample return data from ticket API
- * Useful for methods that call Ticket.fromApi
  */
-const apiTicketData = {
-  created_at: '2016-01-01T00:00:000Z',
-  created_by: 'created_by',
-  custom_fields: [{
-    'key1': 'value1'
-  }],
-  id: 'id',
-  last_message_at: '2016-01-01T00:00:000Z',
-  state: 'state',
-  subject: 'subject',
-  ticket_number: 'ticket_number',
-  updated_by: 'updated_by'
-};
+let apiTicketData: any = null;
 
 describe('[Unit Tests]', () => {
+  beforeEach(() => {
+    apiTicketData = {
+      created_at: moment('2016-01-01T00:00:000Z').toDate(),
+      custom_fields: [
+        { key: 'key1', value: 'value1' }
+      ],
+      id: 1,
+      state: 'state',
+      subject: 'subject',
+      ticket_number: 1
+    };
+  });
+
   describe('Tickets', () => {
     describe('Create', () => {
       it('should post ticket data', () => {
@@ -53,6 +54,19 @@ describe('[Unit Tests]', () => {
 
         return tickets.create(ticketData)
           .catch(error => chai.assert.strictEqual(error, errorMessage));
+      });
+    });
+
+    describe('Show', () => {
+      it('should process custom_fields into hash-like object', () => {
+        const tickets = buildTickets({
+          get: { data: { ticket: apiTicketData } }
+        });
+
+        return tickets.show(1)
+          .then(data => {
+            chai.assert.strictEqual(data.ticket.custom_fields['key1'], 'value1');
+          });
       });
     });
   });
