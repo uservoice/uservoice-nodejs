@@ -17,7 +17,7 @@ const client = new UserVoice.Client({
 client.loginAsOwner()
   .then(ownerClient => {
     const example = new Example(ownerClient);
-    example.listTickets();
+    example.getCustomFields();
   });
 
 class Example {
@@ -32,16 +32,18 @@ class Example {
       email: 'testuser@test123498888391.com',
       name: 'Test User',
       ticket: {
-        created_at: new Date(2014, 0, 0, 0, 0, 0, 0),
         custom_field_values: {
-          'test-key': 'test-value'
+          'Project': 'My Project'
         },
         message: 'This is the body',
         state: 'open',
-        subject: 'Test Ticket',
-        updated_at: new Date(2014, 0, 0, 0, 0, 0, 0)
+        subject: 'Test Ticket'
       }
     }));
+  }
+
+  public getCustomFields() {
+    return this.defaultPromiseHandler(this.uvClient.customFieldService.list());
   }
 
   public createMessage() {
@@ -97,7 +99,7 @@ class Example {
       ticket: {
         created_at: new Date(2012, 1, 1, 0, 0, 0, 0),
         custom_field_values: {
-          'my-field': 'my-value'
+          'Project': 'My Project'
         },
         subject: 'Some edits',
         updated_at: new Date(2012, 1, 1, 0, 0, 0, 0)

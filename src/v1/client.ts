@@ -3,6 +3,7 @@ import * as querystring from 'querystring';
 import {TicketService} from './api/services/ticketService';
 import {TicketMessageService} from './api/services/ticketMessageService';
 import {TicketNoteService} from './api/services/ticketNoteService';
+import {CustomFieldService} from './api/services/customFieldService';
 import {AssetService} from './api/services/assetService';
 import {IOAuthProvider, IOAuthConsumer, OAuthProvider} from './oauthProvider';
 import {IRequestOptions} from './api/models/model';
@@ -15,6 +16,7 @@ export class Client {
   public ticketMessageService = new TicketMessageService(this);
   public ticketNoteService = new TicketNoteService(this);
   public ticketAssetService = new AssetService(this);
+  public customFieldService = new CustomFieldService(this);
   private baseUrl: string;
 
   constructor(private clientOptions: IClientOptions, private oAuthProviderInstance: IOAuthProvider = new OAuthProvider()) {
