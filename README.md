@@ -132,3 +132,13 @@ Npm Tasks
 - npm run build: compile TypeScript, linter, and generator distributable type definitions
 - npm test: run mocha tests
 - npm run lint: run tslint
+
+Versioning
+-----
+This package is currently in a pre-release state; breaking changes may be made before 1.0.0 is released.
+- Use [npm version](https://docs.npmjs.com/cli/version) to bump version; npm version automatically creates a commit, make sure to push those changes
+- Use [Semantic Versioning](http://semver.org/)
+
+Publishing
+-----
+- After running npm version and pushing/merging to master, run npm publish
