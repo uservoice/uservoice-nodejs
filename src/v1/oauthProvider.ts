@@ -1,4 +1,4 @@
-import * as oauth from 'oauth';
+import * as oauth from 'node-oauth';
 
 export class OAuthProvider implements IOAuthProvider {
   public getConsumer(baseUrl: string, apiKey: string, apiSecret: string): IOAuthConsumer {
