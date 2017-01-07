@@ -1,4 +1,4 @@
-declare module "node-oauth" {
+declare module "oauth" {
   const _: any;
   export = _;
 }
